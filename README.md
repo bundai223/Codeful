@@ -2,6 +2,7 @@
 
 ##use [github api v3][github_api]
     ex) https://api.github.com/search/users?q=bundai223
+    ex) https://api.github.com/users/bundai223/repos
     ex) https://api.github.com/repos/bundai223/dotfiles/zipall
 
 ##use [bitbucket api][bitbucket_api][(日本語)][bitbucket_api_jp]
