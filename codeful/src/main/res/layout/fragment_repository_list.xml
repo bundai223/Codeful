@@ -10,6 +10,11 @@
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:hint="@string/please_input"/>
+        android:layout_height="wrap_content" android:hint="@string/please_input" android:id="@+id/editText"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/button" android:layout_alignTop="@+id/editText" android:layout_toRightOf="@+id/editText"/>
 
 </RelativeLayout>

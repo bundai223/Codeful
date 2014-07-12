@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-
+import jp.curigeo.codeful.fragment.RepositoryListFragment;
 
 
 public class RepositoryListActivity extends Activity {
@@ -21,7 +21,7 @@ public class RepositoryListActivity extends Activity {
         setContentView(R.layout.activity_repository_list);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new RepositoryListFragment())
                     .commit();
         }
     }
@@ -44,21 +44,5 @@ public class RepositoryListActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_repository_list, container, false);
-            return rootView;
-        }
     }
 }

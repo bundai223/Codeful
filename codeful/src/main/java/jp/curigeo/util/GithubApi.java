@@ -1,8 +1,12 @@
 package jp.curigeo.util;
 
+import android.os.AsyncTask;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +26,32 @@ public class GithubApi {
     }
 
     public void requestSearchUser(String keyword) {
-        String apiurl = String.format("https://api.github.com/search/users?q=%s", keyword);
+        AsyncTask<String, Integer, String> task = new AsyncTask<String, Integer, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String keyword = params[0];
 
+                String apiurl = String.format("https://api.github.com/search/users?q=%s", keyword);
+                Request request = new Request.Builder().url(apiurl).addHeader("User-Agent", "test").build();
+
+                try {
+                    Response response = httpClient.newCall(request).execute();
+                    final ResponseBody body = response.body();
+
+                    Logger.i(body.string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    return "";
+                }
+            }
+        };
+
+        String[] array = {
+                keyword
+        };
+
+        task.execute(array);
     }
 
     public void requestSearchRepository(String keyword) {
