@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import jp.curigeo.codeful.R;
-import jp.curigeo.util.GithubApi;
+import jp.curigeo.net.GithubApi;
 
 /**
  * Created by daiji on 2014/07/13.
