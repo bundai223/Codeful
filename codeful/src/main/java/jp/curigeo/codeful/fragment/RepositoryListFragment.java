@@ -6,8 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 import jp.curigeo.codeful.R;
-import jp.curigeo.net.GithubApi;
+import jp.curigeo.net.github.GithubApi;
+import jp.curigeo.net.VolleyUtil;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by daiji on 2014/07/13.
@@ -20,6 +24,8 @@ public class RepositoryListFragment  extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        VolleyUtil.initialize(getActivity());
+
         View rootView = inflater.inflate(R.layout.fragment_repository_list, container, false);
 
         apiCaller = new GithubApi();
@@ -31,7 +37,12 @@ public class RepositoryListFragment  extends Fragment {
             @Override
             public void onClick(View v) {
                 String keyword = editText.getText().toString();
-                apiCaller.requestSearchUser(keyword);
+                try {
+                    apiCaller.requestSearchUser(keyword);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT);
+                }
             }
         });
         return rootView;

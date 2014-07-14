@@ -44,11 +44,12 @@ public class HttpConnector implements Connector {
                     Response response = httpClient.newCall(request).execute();
                     final ResponseBody body = response.body();
 
-                    Logger.i(body.string());
+                    String rawResponse = body.string();
+                    Logger.i(rawResponse);
 
                     // TODO: Error
                     if (callback != null) {
-                        callback.onComplete();
+                        callback.onComplete(rawResponse);
                     }
 
                 } catch (IOException e) {
