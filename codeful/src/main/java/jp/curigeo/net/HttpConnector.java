@@ -32,7 +32,7 @@ public class HttpConnector implements Connector {
      * @param url
      * @param callback
      */
-    public void connect(final String url, final ConnectCallback callback) {
+    public void connect(final String url, final Connector.Callback callback) {
         AsyncTask<String, Integer, Integer> task = new AsyncTask<String, Integer, Integer>() {
             protected Integer doInBackground(String... params) {
                 String keyword = params[0];

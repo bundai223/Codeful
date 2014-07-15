@@ -6,10 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 import jp.curigeo.codeful.R;
-import jp.curigeo.net.github.GithubApi;
+import jp.curigeo.net.github.ApiManager;
 import jp.curigeo.net.VolleyUtil;
+import jp.curigeo.net.github.ResponseSearchRepository;
+import jp.curigeo.net.github.ResponseSearchUser;
+import jp.curigeo.net.github.UsersAdapter;
 
 import java.io.UnsupportedEncodingException;
 
@@ -17,7 +21,7 @@ import java.io.UnsupportedEncodingException;
  * Created by daiji on 2014/07/13.
  */
 public class RepositoryListFragment  extends Fragment {
-    GithubApi apiCaller = null;
+    ApiManager api = null;
 
     public RepositoryListFragment() {
     }
@@ -28,7 +32,7 @@ public class RepositoryListFragment  extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_repository_list, container, false);
 
-        apiCaller = new GithubApi();
+        api = new ApiManager();
 
         final EditText editText = (EditText)rootView.findViewById(R.id.editText);
 
@@ -38,7 +42,8 @@ public class RepositoryListFragment  extends Fragment {
             public void onClick(View v) {
                 String keyword = editText.getText().toString();
                 try {
-                    apiCaller.requestSearchUser(keyword);
+                    api.requestSearchUser(keyword, searchUserCallback);
+                    //api.requestSearchRepository(keyword, searchRepositoryCallback);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT);
@@ -47,4 +52,29 @@ public class RepositoryListFragment  extends Fragment {
         });
         return rootView;
     }
+
+    private ApiManager.Callback<ResponseSearchUser> searchUserCallback = new ApiManager.Callback<ResponseSearchUser>() {
+        @Override
+        public void onComplete(ResponseSearchUser result) {
+            ListView list = (ListView) getActivity().findViewById(R.id.listView);
+            list.setAdapter(new UsersAdapter(getActivity(), result.getUsers()));
+        }
+
+        @Override
+        public void onError() {
+
+        }
+    };
+
+    private ApiManager.Callback<ResponseSearchRepository> searchRepositoryCallback = new ApiManager.Callback<ResponseSearchRepository>() {
+        @Override
+        public void onComplete(ResponseSearchRepository result) {
+
+        }
+
+        @Override
+        public void onError() {
+
+        }
+    };
 }

@@ -4,6 +4,6 @@
     <string name="app_name">Codeful</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="please_input">Please input search.</string>
+    <string name="please_input">Please input search word.</string>
 
 </resources>

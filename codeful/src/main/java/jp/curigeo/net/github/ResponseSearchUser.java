@@ -33,29 +33,12 @@ import java.util.List;
   ]
 }
  */
-public class ResponseUserInfo {
-    public class UserInfo {
-        String login = null;
-        int id = 0;
-        String avatar_url = null;
-        String gravatar_id = null;
-        String url = null;
-        String html_url = null;
-        String followers_url = null;
-        String following_url = null;
-        String gists_url = null;
-        String starred_url = null;
-        String subscriptions_url = null;
-        String organizations_url = null;
-        String repos_url = null;
-        String events_url = null;
-        String received_events_url = null;
-        String type = null;
-        boolean site_admin = false;
-        float score = 0;
-    };
-
+public class ResponseSearchUser {
     private int total_count = 0;
     private boolean incompleteresults = false;
     private List<UserInfo> items = null;
+
+    public int getTotalCount() { return total_count; }
+    public boolean isIncompletResult() { return incompleteresults; }
+    public List<UserInfo> getUsers() { return items; }
 }

@@ -1,37 +1,39 @@
 package jp.curigeo.net.github;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.Request;
-import jp.curigeo.net.ConnectCallback;
+import jp.curigeo.net.ApiCallback;
 import jp.curigeo.net.Connector;
 import jp.curigeo.net.VolleyConnector;
 import jp.curigeo.util.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by nishimuradaiji on 2014/07/09.
  */
-public class GithubApi {
+public class ApiManager {
+    public interface Callback<T> {
+        void onComplete(T result);
+        void onError();
+    }
 
     private final String API_URL_BASE = "https://api.github.com/";
 
-    public GithubApi() {
+    public ApiManager() {
     }
 
-    public void requestSearchUser(String keyword) throws UnsupportedEncodingException {
+    public void requestSearchUser(String keyword, final Callback<ResponseSearchUser> callback) throws UnsupportedEncodingException {
         String apiurl = String.format("https://api.github.com/search/users?q=%s", encodeUrl(keyword));
 
-        connect(apiurl, new ConnectCallback() {
+        connect(apiurl, new Connector.Callback() {
             @Override
             public void onComplete(String response) {
                 Gson gson = new Gson();
-                ResponseUserInfo responseInfo = gson.fromJson(response, ResponseUserInfo.class);
-                Logger.d(responseInfo.toString());
+                ResponseSearchUser responseUser = gson.fromJson(response, ResponseSearchUser.class);
+                Logger.d(responseUser.toString());
+
+                callback.onComplete(responseUser);
             }
 
             @Override
@@ -41,10 +43,24 @@ public class GithubApi {
         });
    }
 
-    public void requestSearchRepository(String keyword) throws UnsupportedEncodingException {
+    public void requestSearchRepository(String keyword, final Callback<ResponseSearchRepository> callback) throws UnsupportedEncodingException {
         String apiurl = String.format("https://api.github.com/search/repositories?q=%s", encodeUrl(keyword));
 
-        connect(apiurl, null);
+        connect(apiurl, new Connector.Callback() {
+            @Override
+            public void onComplete(String response) {
+                Gson gson = new Gson();
+                ResponseSearchRepository responseRepository = gson.fromJson(response, ResponseSearchRepository.class);
+                Logger.d(responseRepository.toString());
+
+                callback.onComplete(responseRepository);
+            }
+
+            @Override
+            public void onCompleteWithError() {
+                callback.onError();
+            }
+        });
     }
 
     public void requestlistupUserRepository(String username) throws UnsupportedEncodingException {
@@ -59,7 +75,7 @@ public class GithubApi {
         connect(apiurl, null);
     }
 
-    private void connect(String url, ConnectCallback callback) {
+    private void connect(String url, Connector.Callback callback) {
         //Connector connector = new HttpConnector();
         Connector connector = new VolleyConnector();
         connector.connect(url, callback);
