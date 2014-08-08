@@ -32,7 +32,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/listView"
-            android:layout_below="@id/search_group"
-            android:layout_alignParentEnd="true"/>
+            android:layout_below="@id/search_group"/>
 
 </RelativeLayout>
