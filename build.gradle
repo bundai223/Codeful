@@ -14,3 +14,9 @@ allprojects {
         mavenCentral()
     }
 }
+
+files(
+    "gradle/ci.gradle"
+).each { file ->
+    if (file.exists()) apply from: file
+}
