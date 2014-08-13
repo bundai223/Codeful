@@ -35,22 +35,6 @@ public class UserListFragment extends Fragment {
 
         api = new ApiManager();
 
-        final EditText editText = (EditText)rootView.findViewById(R.id.editText);
-
-        final View button = rootView.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String keyword = editText.getText().toString();
-                try {
-                    api.requestSearchUser(keyword, searchUserCallback);
-                    //api.requestSearchRepository(keyword, searchRepositoryCallback);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT);
-                }
-            }
-        });
         return rootView;
     }
 
@@ -78,4 +62,18 @@ public class UserListFragment extends Fragment {
 
         }
     };
+
+    public boolean search(String keyword) {
+        boolean result = false;
+        try {
+            api.requestSearchUser(keyword, searchUserCallback);
+            //api.requestSearchRepository(keyword, searchRepositoryCallback);
+            result = true;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT);
+        } finally {
+            return result;
+        }
+    }
 }

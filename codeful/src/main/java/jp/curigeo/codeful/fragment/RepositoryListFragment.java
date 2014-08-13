@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import jp.curigeo.codeful.R;
 import jp.curigeo.net.github.ApiManager;
 import jp.curigeo.net.VolleyUtil;
@@ -20,7 +20,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by daiji on 2014/07/13.
  */
-public class RepositoryListFragment  extends Fragment {
+public class RepositoryListFragment extends Fragment {
     ApiManager api = null;
 
     public RepositoryListFragment() {
@@ -34,22 +34,7 @@ public class RepositoryListFragment  extends Fragment {
 
         api = new ApiManager();
 
-        final EditText editText = (EditText)rootView.findViewById(R.id.editText);
 
-        final View button = rootView.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String keyword = editText.getText().toString();
-                try {
-                    api.requestSearchUser(keyword, searchUserCallback);
-                    //api.requestSearchRepository(keyword, searchRepositoryCallback);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT);
-                }
-            }
-        });
         return rootView;
     }
 
@@ -77,4 +62,18 @@ public class RepositoryListFragment  extends Fragment {
 
         }
     };
+
+    public boolean search(String query) {
+        boolean result = false;
+        try {
+            api.requestSearchUser(query, searchUserCallback);
+            //api.requestSearchRepository(keyword, searchRepositoryCallback);
+            result = true;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT);
+        } finally {
+            return result;
+        }
+    }
 }

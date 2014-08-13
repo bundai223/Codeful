@@ -3,6 +3,7 @@
     package="jp.curigeo.codeful" >
 
     <application
+        android:name="jp.curigeo.codeful.Apps"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
