@@ -100,75 +100,11 @@ import java.util.List;
 }
  */
 public class ResponseSearchRepository {
-    public class RepositoryInfo {
-        int id = 0;
-        String name = null;
-        String full_name = null;
-        UserInfo owner = null;
-//      boolean private = false;
-        String html_url = null;
-        String description = null;
-        boolean fork = false;
-        String url = null;
-        String forks_url = null;
-        String keys_url = null;
-        String collaborators_url = null;
-        String teams_url = null;
-        String hooks_url = null;
-        String issue_events_url = null;
-        String branches_url = null;
-        String tags_url = null;
-        String blogs_url = null;
-        String git_tags_url = null;
-        String git_refs_url = null;
-        String trees_url = null;
-        String statuses_url = null;
-        String languages_url = null;
-        String stargazers_url = null;
-        String contributors_url = null;
-        String subscribers_url = null;
-        String subscription_url = null;
-        String commits_url = null;
-        String git_commits_url = null;
-        String comments_url = null;
-        String issue_comment_url = null;
-        String contents_url = null;
-        String compare_url = null;
-        String merges_url = null;
-        String archive_url = null;
-        String downloads_url = null;
-        String issues_url = null;
-        String pulls_url = null;
-        String milestones_url = null;
-        String notifications_url = null;
-        String labels_url = null;
-        String releases_url = null;
-        String createed_at = null;
-        String updated_at = null;
-        String pushed_at = null;
-        String git_url = null;
-        String ssh_url = null;
-        String clone_url = null;
-        String svn_url = null;
-        String homepage = null;
-        int size = 0;
-        int stargazers_count = 0;
-        int watchers_count = 0;
-        String language = null;
-        boolean has_issues = false;
-        boolean has_downloads = false;
-        boolean has_wiki = false;
-        int forks_count = 0;
-        String mirror_url = null;
-        int open_issues_count = 0;
-        int forks = 0;
-        int open_issues = 0;
-        int watchers = 0;
-        String default_branch = null;
-        float score = 0;
-   };
 
     private int total_count = 0;
     private boolean incompleteresults = false;
     private List<RepositoryInfo> items = null;
-}
+
+    public int getTotalCount() { return total_count; }
+    public boolean isIncompletResult() { return incompleteresults; }
+    public List<RepositoryInfo> getRepositories() { return items; }}

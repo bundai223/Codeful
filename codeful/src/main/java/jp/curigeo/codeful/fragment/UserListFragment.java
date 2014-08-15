@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.io.UnsupportedEncodingException;
 
 import jp.curigeo.codeful.R;
+import jp.curigeo.codeful.Searchable;
 import jp.curigeo.net.VolleyUtil;
 import jp.curigeo.net.github.ApiManager;
 import jp.curigeo.net.github.ResponseSearchRepository;
@@ -21,7 +22,7 @@ import jp.curigeo.net.github.UsersAdapter;
 /**
  * Created by daiji on 2014/07/13.
  */
-public class UserListFragment extends Fragment {
+public class UserListFragment extends Fragment implements Searchable {
     ApiManager api = null;
 
     public UserListFragment() {
@@ -63,11 +64,11 @@ public class UserListFragment extends Fragment {
         }
     };
 
+    @Override
     public boolean search(String keyword) {
         boolean result = false;
         try {
             api.requestSearchUser(keyword, searchUserCallback);
-            //api.requestSearchRepository(keyword, searchRepositoryCallback);
             result = true;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -75,5 +76,10 @@ public class UserListFragment extends Fragment {
         } finally {
             return result;
         }
+    }
+
+    @Override
+    public void cancel() {
+
     }
 }

@@ -9,8 +9,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import jp.curigeo.codeful.R;
+import jp.curigeo.codeful.Searchable;
 import jp.curigeo.net.github.ApiManager;
 import jp.curigeo.net.VolleyUtil;
+import jp.curigeo.net.github.RepositoriesAdapter;
 import jp.curigeo.net.github.ResponseSearchRepository;
 import jp.curigeo.net.github.ResponseSearchUser;
 import jp.curigeo.net.github.UsersAdapter;
@@ -20,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by daiji on 2014/07/13.
  */
-public class RepositoryListFragment extends Fragment {
+public class RepositoryListFragment extends Fragment implements Searchable {
     ApiManager api = null;
 
     public RepositoryListFragment() {
@@ -38,23 +40,11 @@ public class RepositoryListFragment extends Fragment {
         return rootView;
     }
 
-    private ApiManager.Callback<ResponseSearchUser> searchUserCallback = new ApiManager.Callback<ResponseSearchUser>() {
-        @Override
-        public void onComplete(ResponseSearchUser result) {
-            ListView list = (ListView) getActivity().findViewById(R.id.listView);
-            list.setAdapter(new UsersAdapter(getActivity(), result.getUsers()));
-        }
-
-        @Override
-        public void onError() {
-
-        }
-    };
-
     private ApiManager.Callback<ResponseSearchRepository> searchRepositoryCallback = new ApiManager.Callback<ResponseSearchRepository>() {
         @Override
         public void onComplete(ResponseSearchRepository result) {
-
+            ListView list = (ListView) getActivity().findViewById(R.id.listView);
+            list.setAdapter(new RepositoriesAdapter(getActivity(), result.getRepositories()));
         }
 
         @Override
@@ -63,11 +53,11 @@ public class RepositoryListFragment extends Fragment {
         }
     };
 
+    @Override
     public boolean search(String query) {
         boolean result = false;
         try {
-            api.requestSearchUser(query, searchUserCallback);
-            //api.requestSearchRepository(keyword, searchRepositoryCallback);
+            api.requestSearchRepository(query, searchRepositoryCallback);
             result = true;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -75,5 +65,10 @@ public class RepositoryListFragment extends Fragment {
         } finally {
             return result;
         }
+    }
+
+    @Override
+    public void cancel() {
+
     }
 }

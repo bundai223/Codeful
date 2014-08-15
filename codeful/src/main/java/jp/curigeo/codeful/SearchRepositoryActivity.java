@@ -13,12 +13,12 @@ import jp.curigeo.codeful.fragment.RepositoryListFragment;
 import jp.curigeo.codeful.fragment.UserListFragment;
 
 
-public class RepositoryListActivity extends Activity {
+public class SearchRepositoryActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_repository_list);
+        setContentView(R.layout.activity_search_repository);
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -31,7 +31,7 @@ public class RepositoryListActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.repository_list, menu);
+        getMenuInflater().inflate(R.menu.search_repository, menu);
 
         MenuItem searchItem = menu.findItem(R.id.searchView);
         final SearchView searchView = (SearchView) searchItem.getActionView();
@@ -54,8 +54,13 @@ public class RepositoryListActivity extends Activity {
     private SearchView.OnQueryTextListener searchViewListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
-            RepositoryListFragment fragment = (RepositoryListFragment) getFragmentManager().findFragmentById(R.id.container);
-            return fragment.search(query);
+            Fragment fragment = getFragmentManager().findFragmentById(android.R.id.content);
+            if (Searchable.class.isAssignableFrom(fragment.getClass())) {
+                Searchable searchable = (Searchable) fragment;
+                return searchable.search(query);
+            } else {
+                return false;
+            }
         }
 
         @Override
