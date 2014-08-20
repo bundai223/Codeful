@@ -1,6 +1,8 @@
 package jp.curigeo.net.github;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import jp.curigeo.net.ApiCallback;
 import jp.curigeo.net.Connector;
 import jp.curigeo.net.VolleyConnector;
@@ -8,6 +10,7 @@ import jp.curigeo.util.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * Created by nishimuradaiji on 2014/07/09.
@@ -63,20 +66,35 @@ public class ApiManager {
         });
     }
 
-    public void requestlistupUserRepository(String username) throws UnsupportedEncodingException {
+    public void requestlistupUserRepository(String username, final Callback<ResponseSearchRepository> callback) throws UnsupportedEncodingException {
         String apiurl = String.format("https://api.github.com/users/%s/repos", encodeUrl(username));
 
-        connect(apiurl, null);
+        connect(apiurl, new Connector.Callback() {
+            @Override
+            public void onComplete(String response) {
+                Gson gson = new Gson();
+                TypeToken<List<RepositoryInfo>> token = new TypeToken<List<RepositoryInfo>>(){};
+                List<RepositoryInfo> repositoryList = gson.fromJson(response, token.getType());
+                ResponseSearchRepository responseRepository = new ResponseSearchRepository(repositoryList);
+                Logger.d(responseRepository.toString());
+
+                callback.onComplete(responseRepository);
+            }
+
+            @Override
+            public void onCompleteWithError() {
+                callback.onError();
+            }
+        });
     }
 
-    public void requestGetUserRepository(String username, String repositoryName) throws UnsupportedEncodingException {
-        String apiurl = String.format("https://api.github.com/repos/%s/%s/zipall", encodeUrl(username), encodeUrl(repositoryName));
-
-        connect(apiurl, null);
-    }
+//    public void requestGetUserRepository(String username, String repositoryName) throws UnsupportedEncodingException {
+//        String apiurl = String.format("https://api.github.com/repos/%s/%s/zipall", encodeUrl(username), encodeUrl(repositoryName));
+//
+//        connect(apiurl, null);
+//    }
 
     private void connect(String url, Connector.Callback callback) {
-        //Connector connector = new HttpConnector();
         Connector connector = new VolleyConnector();
         connector.connect(url, callback);
     }

@@ -11,7 +11,7 @@ public class LruImageCache implements ImageLoader.ImageCache {
     private LruCache<String, Bitmap> memoryCache;
 
     public LruImageCache() {
-        int maxMemory = (int)(Runtime.getRuntime().maxMemory() / 1024);
+        int maxMemory = (int)(Runtime.getRuntime().maxMemory());
         int cacheSize = maxMemory / 8;
 
         memoryCache = new LruCache<String, Bitmap>(cacheSize) {
@@ -19,7 +19,7 @@ public class LruImageCache implements ImageLoader.ImageCache {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
                 // KB単位
-                return bitmap.getByteCount() / 1024;
+                return bitmap.getByteCount();
             }
         };
     }

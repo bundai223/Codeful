@@ -105,6 +105,13 @@ public class ResponseSearchRepository {
     private boolean incompleteresults = false;
     private List<RepositoryInfo> items = null;
 
+    public ResponseSearchRepository(List<RepositoryInfo> repositoryList) {
+        items = repositoryList;
+        total_count = items.size();
+        incompleteresults = false;
+    }
+
     public int getTotalCount() { return total_count; }
     public boolean isIncompletResult() { return incompleteresults; }
-    public List<RepositoryInfo> getRepositories() { return items; }}
+    public List<RepositoryInfo> getRepositories() { return items; }
+}
