@@ -29,14 +29,27 @@ public class UserListFragment extends Fragment implements Searchable {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        api = new ApiManager();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         VolleyUtil.initialize(getActivity());
 
         View rootView = inflater.inflate(R.layout.fragment_repository_list, container, false);
 
-        api = new ApiManager();
-
         return rootView;
+    }
+
+    public void onResume() {
+        super.onResume();
+    }
+
+    public void onPause() {
+        super.onPause();
     }
 
     private ApiManager.Callback<ResponseSearchUser> searchUserCallback = new ApiManager.Callback<ResponseSearchUser>() {

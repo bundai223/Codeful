@@ -15,6 +15,9 @@ import jp.curigeo.codeful.fragment.UserListFragment;
 
 public class SearchRepositoryActivity extends Activity {
 
+    MainTabListener<UserListFragment> userTabListener;
+    MainTabListener<RepositoryListFragment> repoTabListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +26,10 @@ public class SearchRepositoryActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        actionBar.addTab(actionBar.newTab().setText("Repos").setTabListener(new MainTabListener<RepositoryListFragment>(this, "ReposTag", RepositoryListFragment.class)));
-        actionBar.addTab(actionBar.newTab().setText("User").setTabListener(new MainTabListener<UserListFragment>(this, "UserTag", UserListFragment.class)));
+        userTabListener = new MainTabListener<UserListFragment>(this, "UserTag", UserListFragment.class);
+        repoTabListener = new MainTabListener<RepositoryListFragment>(this, "ReposTag", RepositoryListFragment.class);
+        actionBar.addTab(actionBar.newTab().setText("User").setTabListener(userTabListener));
+        actionBar.addTab(actionBar.newTab().setText("Repo").setTabListener(repoTabListener));
     }
 
 
