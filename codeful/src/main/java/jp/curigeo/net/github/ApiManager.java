@@ -21,13 +21,19 @@ public class ApiManager {
         void onError();
     }
 
-    private final String API_URL_BASE = "https://api.github.com/";
+    private final String API_URL_BASE = "https://api.github.com";
 
     public ApiManager() {
     }
 
+    /**
+     * ユーザーを検索する。
+     * @param keyword
+     * @param callback
+     * @throws UnsupportedEncodingException
+     */
     public void requestSearchUser(String keyword, final Callback<ResponseSearchUser> callback) throws UnsupportedEncodingException {
-        String apiurl = String.format("https://api.github.com/search/users?q=%s", encodeUrl(keyword));
+        String apiurl = String.format("%s/search/users?q=%s", API_URL_BASE, encodeUrl(keyword));
 
         connect(apiurl, new Connector.Callback() {
             @Override
@@ -46,8 +52,14 @@ public class ApiManager {
         });
    }
 
+    /**
+     * リポジトリーを検索する。
+     * @param keyword
+     * @param callback
+     * @throws UnsupportedEncodingException
+     */
     public void requestSearchRepository(String keyword, final Callback<ResponseSearchRepository> callback) throws UnsupportedEncodingException {
-        String apiurl = String.format("https://api.github.com/search/repositories?q=%s", encodeUrl(keyword));
+        String apiurl = String.format("%s/search/repositories?q=%s", API_URL_BASE, encodeUrl(keyword));
 
         connect(apiurl, new Connector.Callback() {
             @Override
@@ -66,8 +78,14 @@ public class ApiManager {
         });
     }
 
+    /**
+     * ユーザーのリポジトリー一覧を取得する。
+     * @param username
+     * @param callback
+     * @throws UnsupportedEncodingException
+     */
     public void requestlistupUserRepository(String username, final Callback<ResponseSearchRepository> callback) throws UnsupportedEncodingException {
-        String apiurl = String.format("https://api.github.com/users/%s/repos", encodeUrl(username));
+        String apiurl = String.format("%s/users/%s/repos", API_URL_BASE, encodeUrl(username));
 
         connect(apiurl, new Connector.Callback() {
             @Override
@@ -88,12 +106,21 @@ public class ApiManager {
         });
     }
 
-//    public void requestGetUserRepository(String username, String repositoryName) throws UnsupportedEncodingException {
-//        String apiurl = String.format("https://api.github.com/repos/%s/%s/zipall", encodeUrl(username), encodeUrl(repositoryName));
-//
+    /**
+     * リポジトリをダウンロードする処理
+     * @param url
+     * @throws UnsupportedEncodingException
+     */
+    public void requestGetUserRepository(String url) throws UnsupportedEncodingException {
+//        String apiurl = String.format("%s/repos/%s/%s/zipall", API_URL_BASE, encodeUrl(username), encodeUrl(repositoryName));
 //        connect(apiurl, null);
-//    }
+    }
 
+    /**
+     *  接続処理の根幹
+     * @param url
+     * @param callback
+     */
     private void connect(String url, Connector.Callback callback) {
         Connector connector = new VolleyConnector();
         connector.connect(url, callback);

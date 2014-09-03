@@ -24,11 +24,13 @@ import java.io.UnsupportedEncodingException;
 public class RepositoryListFragment extends Fragment implements Searchable {
     public static String SEARCH_USER = "USER";
 
-    ApiManager api = null;
-    String searchString;
-    boolean searchUserName = false;
+    ApiManager mApiManager = null;
+    RepositoriesAdapter mAdapter = null;
+    String mSearchString;
+    boolean mSearchUserName = false;
 
     public RepositoryListFragment() {
+        mApiManager = new ApiManager();
     }
 
     @Override
@@ -39,21 +41,22 @@ public class RepositoryListFragment extends Fragment implements Searchable {
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(SEARCH_USER)) {
-            searchString = args.getString(SEARCH_USER);
-            searchUserName = true;
+            mSearchString = args.getString(SEARCH_USER);
+            mSearchUserName = true;
         }
 
-        api = new ApiManager();
-
-        if (searchUserName) {
-            searchByUserName(searchString);
+        if (mSearchUserName) {
+            searchByUserName(mSearchString);
+        } else if (mAdapter != null) {
+            ListView list = (ListView) rootView.findViewById(R.id.listView);
+            list.setAdapter(mAdapter);
         }
         return rootView;
     }
 
     @Override
     public boolean search(String query) {
-        if (searchUserName) {
+        if (mSearchUserName) {
             return searchByUserName(query);
         } else {
             return searchByRepositoryName(query);
@@ -68,9 +71,8 @@ public class RepositoryListFragment extends Fragment implements Searchable {
     private boolean searchByRepositoryName(String reposName) {
         boolean result = false;
         try {
-            //api.requestSearchRepository(reposName, searchRepositoryCallback);
-            api.requestlistupUserRepository(reposName, searchRepositoryCallback);
-            searchString = reposName;
+            mApiManager.requestlistupUserRepository(reposName, searchRepositoryCallback);
+            mSearchString = reposName;
             result = true;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -83,8 +85,8 @@ public class RepositoryListFragment extends Fragment implements Searchable {
     private boolean searchByUserName(String userName) {
         boolean result = false;
         try {
-            api.requestlistupUserRepository(userName, searchRepositoryCallback);
-            searchString = userName;
+            mApiManager.requestlistupUserRepository(userName, searchRepositoryCallback);
+            mSearchString = userName;
             result = true;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -97,8 +99,9 @@ public class RepositoryListFragment extends Fragment implements Searchable {
     private ApiManager.Callback<ResponseSearchRepository> searchRepositoryCallback = new ApiManager.Callback<ResponseSearchRepository>() {
         @Override
         public void onComplete(ResponseSearchRepository result) {
+            mAdapter = new RepositoriesAdapter(getActivity(), result.getRepositories());
             ListView list = (ListView) getActivity().findViewById(R.id.listView);
-            list.setAdapter(new RepositoriesAdapter(getActivity(), result.getRepositories()));
+            list.setAdapter(mAdapter);
         }
 
         @Override

@@ -56,6 +56,20 @@ public class SearchRepositoryActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Userのリポジトリ一覧を検索しながらTabを切り替える処理
+     * @param userName
+     */
+    public void searchUsersRepository(String userName) {
+        Bundle arg = new Bundle();
+        arg.putString(RepositoryListFragment.SEARCH_USER, userName);
+        repoTabListener.setFragmentArgument(arg);
+        getActionBar().selectTab(getActionBar().getTabAt(1));
+    }
+
+    /**
+     * 入力した文字列で検索する処理
+     */
     private SearchView.OnQueryTextListener searchViewListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
@@ -81,12 +95,17 @@ public class SearchRepositoryActivity extends Activity {
         private final Activity activity;
         private final String tag;
         private final Class<T> cls;
+        private Bundle argument;
 
         public MainTabListener(
                 Activity activity, String tag, Class<T> cls) {
             this.activity = activity;
             this.tag = tag;
             this.cls = cls;
+        }
+
+        public void setFragmentArgument(Bundle argument) {
+            this.argument = argument;
         }
 
         @Override
@@ -97,8 +116,10 @@ public class SearchRepositoryActivity extends Activity {
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
             if (fragment == null) {
                 fragment = Fragment.instantiate(activity, cls.getName());
+                fragment.setArguments(argument);
                 ft.add(android.R.id.content, fragment, tag);
             } else {
+                fragment.setArguments(argument);
                 ft.attach(fragment);
             }
         }

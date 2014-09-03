@@ -56,4 +56,13 @@ public class UsersAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    /**
+     * User情報を取得
+     * @param position
+     * @return
+     */
+    public UserInfo getUser(int position) {
+        return usersList.get(position);
+    }
 }
