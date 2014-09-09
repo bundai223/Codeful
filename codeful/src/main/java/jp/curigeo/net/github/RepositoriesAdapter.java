@@ -57,4 +57,13 @@ public class RepositoriesAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    /**
+     * リポジトリ情報を取得する。
+     * @param position
+     * @return
+     */
+    public RepositoryInfo getRepositoryInfo(int position) {
+        return repositoriesList.get(position);
+    }
 }

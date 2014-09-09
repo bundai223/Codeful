@@ -71,5 +71,7 @@ public class RepositoryInfo {
     private float score = 0;
 
     public String getName() { return name; }
+    public String getDefaultBranchName() { return default_branch; }
+    public UserInfo getOwner() { return owner; }
 }
 

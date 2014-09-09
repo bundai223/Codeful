@@ -117,6 +117,31 @@ public class ApiManager {
     }
 
     /**
+     * リポジトリのブランチをzipでダウンロードする。
+     * @param username
+     * @param reposName
+     * @param branch
+     */
+    public void requestGetUserRepositoryBranch(String username, String reposName, String branch, final Callback<String> callback) throws UnsupportedEncodingException {
+        String apiurl = getRepositoryZipUrl(username, reposName, branch);
+
+        connect(apiurl, new Connector.Callback() {
+            @Override
+            public void onComplete(String response) {
+                callback.onComplete(response);
+            }
+
+            @Override
+            public void onCompleteWithError() {
+                callback.onError();
+            }
+        });
+    }
+    public String getRepositoryZipUrl(String username, String reposName, String branch) throws UnsupportedEncodingException {
+        return String.format("http://github.com/%s/%s/archive/%s.zip", encodeUrl(username), encodeUrl(reposName), encodeUrl(branch));
+    }
+
+    /**
      *  接続処理の根幹
      * @param url
      * @param callback

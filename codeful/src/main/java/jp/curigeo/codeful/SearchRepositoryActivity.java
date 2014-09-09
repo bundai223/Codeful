@@ -28,7 +28,7 @@ public class SearchRepositoryActivity extends Activity {
 
         userTabListener = new MainTabListener<UserListFragment>(this, "UserTag", UserListFragment.class);
         repoTabListener = new MainTabListener<RepositoryListFragment>(this, "ReposTag", RepositoryListFragment.class);
-        actionBar.addTab(actionBar.newTab().setText("User").setTabListener(userTabListener));
+        actionBar.addTab(actionBar.newTab().setText("User").setIcon(getApplicationInfo().icon).setTabListener(userTabListener));
         actionBar.addTab(actionBar.newTab().setText("Repo").setTabListener(repoTabListener));
     }
 
@@ -119,14 +119,13 @@ public class SearchRepositoryActivity extends Activity {
                 fragment.setArguments(argument);
                 ft.add(android.R.id.content, fragment, tag);
             } else {
-                fragment.setArguments(argument);
                 ft.attach(fragment);
             }
         }
 
         @Override
         public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            if (fragment != null) {
+            if (fragment != null && fragment.isAdded()) {
                 ft.detach(fragment);
             }
         }

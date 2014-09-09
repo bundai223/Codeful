@@ -1,10 +1,15 @@
 package jp.curigeo.codeful.fragment;
 
+import android.app.DownloadManager;
 import android.app.Fragment;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -13,6 +18,7 @@ import jp.curigeo.codeful.Searchable;
 import jp.curigeo.net.github.ApiManager;
 import jp.curigeo.net.VolleyUtil;
 import jp.curigeo.net.github.RepositoriesAdapter;
+import jp.curigeo.net.github.RepositoryInfo;
 import jp.curigeo.net.github.ResponseSearchRepository;
 
 import java.io.UnsupportedEncodingException;
@@ -71,7 +77,7 @@ public class RepositoryListFragment extends Fragment implements Searchable {
     private boolean searchByRepositoryName(String reposName) {
         boolean result = false;
         try {
-            mApiManager.requestlistupUserRepository(reposName, searchRepositoryCallback);
+            mApiManager.requestSearchRepository(reposName, searchRepositoryCallback);
             mSearchString = reposName;
             result = true;
         } catch (UnsupportedEncodingException e) {
@@ -102,11 +108,41 @@ public class RepositoryListFragment extends Fragment implements Searchable {
             mAdapter = new RepositoriesAdapter(getActivity(), result.getRepositories());
             ListView list = (ListView) getActivity().findViewById(R.id.listView);
             list.setAdapter(mAdapter);
+            list.setOnItemClickListener(mItemClickListener);
         }
 
         @Override
         public void onError() {
 
         }
+    };
+
+    /**
+     * リストクリックしたときの挙動
+     */
+    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            RepositoryInfo info = mAdapter.getRepositoryInfo(position);
+
+            // TODO: branch・tagなどを取得して処理したい。
+            try {
+                String reposName = info.getName();
+                String ownerName = info.getOwner().getName();
+                String branchName = info.getDefaultBranchName();
+                String url = mApiManager.getRepositoryZipUrl(ownerName, reposName, branchName);
+
+                String filename = String.format("%s-%s-%s.zip", ownerName, reposName, branchName);
+                DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                //request.setDestinationInExternalFilesDir(getActivity().getApplicationContext(), Environment.DIRECTORY_DOWNLOADS, "/" + filename);
+                request.setTitle(filename);
+                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
+
+                long downloadId = manager.enqueue(request);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        };
     };
 }
