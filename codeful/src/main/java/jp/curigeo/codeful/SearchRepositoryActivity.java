@@ -13,6 +13,9 @@ import jp.curigeo.codeful.fragment.RepositoryListFragment;
 import jp.curigeo.codeful.fragment.UserListFragment;
 
 
+/**
+ * 検索画面
+ */
 public class SearchRepositoryActivity extends Activity {
 
     MainTabListener<UserListFragment> userTabListener;
@@ -58,6 +61,7 @@ public class SearchRepositoryActivity extends Activity {
 
     /**
      * Userのリポジトリ一覧を検索しながらTabを切り替える処理
+     *
      * @param userName
      */
     public void searchUsersRepository(String userName) {
@@ -102,10 +106,11 @@ public class SearchRepositoryActivity extends Activity {
             this.activity = activity;
             this.tag = tag;
             this.cls = cls;
+            this.argument = new Bundle();
         }
 
         public void setFragmentArgument(Bundle argument) {
-            this.argument = argument;
+            this.argument.putAll(argument);
         }
 
         @Override
@@ -119,6 +124,9 @@ public class SearchRepositoryActivity extends Activity {
                 fragment.setArguments(argument);
                 ft.add(android.R.id.content, fragment, tag);
             } else {
+                if (argument != null) {
+                    fragment.getArguments().putAll(argument);
+                }
                 ft.attach(fragment);
             }
         }

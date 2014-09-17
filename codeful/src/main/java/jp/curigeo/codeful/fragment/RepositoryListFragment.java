@@ -9,10 +9,12 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.DownloadListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import jp.curigeo.codeful.Apps;
 import jp.curigeo.codeful.R;
 import jp.curigeo.codeful.Searchable;
 import jp.curigeo.net.github.ApiManager;
@@ -21,6 +23,7 @@ import jp.curigeo.net.github.RepositoriesAdapter;
 import jp.curigeo.net.github.RepositoryInfo;
 import jp.curigeo.net.github.ResponseSearchRepository;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -125,6 +128,7 @@ public class RepositoryListFragment extends Fragment implements Searchable {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             RepositoryInfo info = mAdapter.getRepositoryInfo(position);
 
+
             // TODO: branch・tagなどを取得して処理したい。
             try {
                 String reposName = info.getName();
@@ -132,17 +136,34 @@ public class RepositoryListFragment extends Fragment implements Searchable {
                 String branchName = info.getDefaultBranchName();
                 String url = mApiManager.getRepositoryZipUrl(ownerName, reposName, branchName);
 
+                String path = Apps.getDownloadRepositoryPath(getActivity());
                 String filename = String.format("%s-%s-%s.zip", ownerName, reposName, branchName);
+                File file = new File(path + "/" + filename);
+
+                File dir = file.getParentFile();
+                if (dir.exists() == false) {
+                    // なければ生成
+                    dir.mkdir();
+                }
+                if (file.exists()) {
+                    // すでにファイルが存在していたら削除
+                    file.delete();
+                }
+
                 DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
                 DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                //request.setDestinationInExternalFilesDir(getActivity().getApplicationContext(), Environment.DIRECTORY_DOWNLOADS, "/" + filename);
                 request.setTitle(filename);
                 request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
+                request.setMimeType("application/zip");
+                request.setDestinationUri(Uri.fromFile(file));
+                request.setVisibleInDownloadsUi(true);
 
                 long downloadId = manager.enqueue(request);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-        };
+        }
+
+        ;
     };
 }
