@@ -8,4 +8,9 @@
         android:showAsAction="always"
         android:title="@string/action_settings"
         android:actionViewClass="android.widget.SearchView"/>
+    <item
+        android:id="@+id/zip"
+        android:icon="@android:drawable/ic_menu_save"
+        android:showAsAction="always"
+        android:title="@string/action_zip" />
 </menu>

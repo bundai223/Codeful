@@ -1,6 +1,7 @@
 package jp.curigeo.codeful.sourceViewer;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class SourceCodeView extends TextView {
             setText(sourcecode);
         } else {
             String highlightedStr = highlighter.highlight(fileType, sourcecode);
-            setText(highlightedStr);
+            setText(Html.fromHtml(highlightedStr));
         }
     }
 

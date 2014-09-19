@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,7 +17,6 @@ import jp.curigeo.codeful.SearchRepositoryActivity;
 import jp.curigeo.codeful.Searchable;
 import jp.curigeo.net.VolleyUtil;
 import jp.curigeo.net.github.ApiManager;
-import jp.curigeo.net.github.ResponseSearchRepository;
 import jp.curigeo.net.github.ResponseSearchUser;
 import jp.curigeo.net.github.UserInfo;
 import jp.curigeo.net.github.UsersAdapter;

@@ -5,11 +5,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.DownloadListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -63,6 +61,11 @@ public class RepositoryListFragment extends Fragment implements Searchable {
         return rootView;
     }
 
+    /**
+     * 検索バーから呼びだされる検索処理。
+     * @param query
+     * @return
+     */
     @Override
     public boolean search(String query) {
         if (mSearchUserName) {
@@ -72,9 +75,12 @@ public class RepositoryListFragment extends Fragment implements Searchable {
         }
     }
 
+    /**
+     * 検索中止処理
+     */
     @Override
     public void cancel() {
-
+        // TODO: not implement
     }
 
     private boolean searchByRepositoryName(String reposName) {
@@ -91,6 +97,12 @@ public class RepositoryListFragment extends Fragment implements Searchable {
         }
     }
 
+    /**
+     * ユーザー名で検索する時の処理
+     *
+     * @param userName
+     * @return
+     */
     private boolean searchByUserName(String userName) {
         boolean result = false;
         try {
@@ -102,6 +114,45 @@ public class RepositoryListFragment extends Fragment implements Searchable {
             Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT);
         } finally {
             return result;
+        }
+    }
+
+    /**
+     * リポジトリのダウンロードを開始する処理。
+     *
+     * @param userName
+     * @param reposName
+     * @param branchName
+     */
+    private void downloadRepository(String userName, String reposName, String branchName) {
+        try {
+            String url = mApiManager.getRepositoryZipUrl(userName, reposName, branchName);
+
+            String path = Apps.getDownloadRepositoryPath(getActivity());
+            String filename = Apps.getDownloadRepositoryName(userName, reposName, branchName);
+            File file = new File(path + "/" + filename);
+
+            File dir = file.getParentFile();
+            if (dir.exists() == false) {
+                // なければ生成
+                dir.mkdir();
+            }
+            if (file.exists()) {
+                // すでにファイルが存在していたら削除
+                file.delete();
+            }
+
+            DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+            request.setTitle(filename);
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
+            request.setMimeType("application/zip");
+            request.setDestinationUri(Uri.fromFile(file));
+            request.setVisibleInDownloadsUi(true);
+
+            long downloadId = manager.enqueue(request);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 
@@ -130,38 +181,11 @@ public class RepositoryListFragment extends Fragment implements Searchable {
 
 
             // TODO: branch・tagなどを取得して処理したい。
-            try {
-                String reposName = info.getName();
-                String ownerName = info.getOwner().getName();
-                String branchName = info.getDefaultBranchName();
-                String url = mApiManager.getRepositoryZipUrl(ownerName, reposName, branchName);
+            String reposName = info.getName();
+            String ownerName = info.getOwner().getName();
+            String branchName = info.getDefaultBranchName();
 
-                String path = Apps.getDownloadRepositoryPath(getActivity());
-                String filename = String.format("%s-%s-%s.zip", ownerName, reposName, branchName);
-                File file = new File(path + "/" + filename);
-
-                File dir = file.getParentFile();
-                if (dir.exists() == false) {
-                    // なければ生成
-                    dir.mkdir();
-                }
-                if (file.exists()) {
-                    // すでにファイルが存在していたら削除
-                    file.delete();
-                }
-
-                DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                request.setTitle(filename);
-                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
-                request.setMimeType("application/zip");
-                request.setDestinationUri(Uri.fromFile(file));
-                request.setVisibleInDownloadsUi(true);
-
-                long downloadId = manager.enqueue(request);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            downloadRepository(ownerName, reposName, branchName);
         }
 
         ;
