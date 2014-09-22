@@ -112,11 +112,10 @@ public class SearchRepositoryActivity extends Activity {
             this.activity = activity;
             this.tag = tag;
             this.cls = cls;
-            this.argument = new Bundle();
         }
 
         public void setFragmentArgument(Bundle argument) {
-            this.argument.putAll(argument);
+            this.argument = argument;
         }
 
         @Override
@@ -131,10 +130,13 @@ public class SearchRepositoryActivity extends Activity {
                 ft.add(android.R.id.content, fragment, tag);
             } else {
                 if (argument != null) {
-                    fragment.getArguments().putAll(argument);
+                    Bundle oldArg = fragment.getArguments();
+                    oldArg.clear();
+                    oldArg.putAll(argument);
                 }
                 ft.attach(fragment);
             }
+            argument = null;
         }
 
         @Override

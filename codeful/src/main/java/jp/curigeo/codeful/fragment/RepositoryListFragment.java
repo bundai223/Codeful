@@ -34,7 +34,6 @@ public class RepositoryListFragment extends Fragment implements Searchable {
     ApiManager mApiManager = null;
     RepositoriesAdapter mAdapter = null;
     String mSearchString;
-    boolean mSearchUserName = false;
 
     public RepositoryListFragment() {
         mApiManager = new ApiManager();
@@ -46,13 +45,14 @@ public class RepositoryListFragment extends Fragment implements Searchable {
 
         View rootView = inflater.inflate(R.layout.fragment_repository_list, container, false);
 
+        boolean searchUserName = false;
         Bundle args = getArguments();
         if (args != null && args.containsKey(SEARCH_USER)) {
             mSearchString = args.getString(SEARCH_USER);
-            mSearchUserName = true;
+            searchUserName = true;
         }
 
-        if (mSearchUserName) {
+        if (searchUserName) {
             searchByUserName(mSearchString);
         } else if (mAdapter != null) {
             ListView list = (ListView) rootView.findViewById(R.id.listView);
@@ -63,16 +63,13 @@ public class RepositoryListFragment extends Fragment implements Searchable {
 
     /**
      * 検索バーから呼びだされる検索処理。
+     *
      * @param query
      * @return
      */
     @Override
     public boolean search(String query) {
-        if (mSearchUserName) {
-            return searchByUserName(query);
-        } else {
-            return searchByRepositoryName(query);
-        }
+        return searchByRepositoryName(query);
     }
 
     /**

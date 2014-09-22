@@ -23,17 +23,17 @@ public class VolleyUtil {
         }
     }
 
-    static public void onPause() {
-        if (queue != null) {
-            queue.stop();
-        }
-    }
-
-    static public void onResume() {
-        if (queue != null) {
-            queue.start();
-        }
-    }
+//    static public void onPause() {
+//        if (queue != null) {
+//            queue.stop();
+//        }
+//    }
+//
+//    static public void onResume() {
+//        if (queue != null) {
+//            queue.start();
+//        }
+//    }
 
     static public ImageLoader getImageLoader() {
         return imageLoader;

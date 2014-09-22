@@ -45,15 +45,19 @@ public class RepositoriesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.userinfo_element, null);
+            convertView = inflater.inflate(R.layout.reposinfo_element, null);
         }
 
         RepositoryInfo reposInfo = repositoriesList.get(position);
-        TextView textName = (TextView)convertView.findViewById(R.id.text_name);
-        textName.setText(reposInfo.getName());
+        TextView textReposName = (TextView)convertView.findViewById(R.id.text_repos_name);
+        textReposName.setText(reposInfo.getName());
 
-//        NetworkImageView imageAvatar = (NetworkImageView)convertView.findViewById(R.id.image_avatar);
-//        imageAvatar.setImageUrl(reposInfo.getAvatarUrl(), VolleyUtil.getImageLoader());
+        UserInfo userInfo = reposInfo.getOwner();
+        TextView textUserName = (TextView)convertView.findViewById(R.id.text_user_name);
+        textUserName.setText(userInfo.getName());
+
+        NetworkImageView iconView = (NetworkImageView)convertView.findViewById(R.id.image_avatar);
+        iconView.setImageUrl(userInfo.getUrl(), VolleyUtil.getImageLoader());
 
         return convertView;
     }

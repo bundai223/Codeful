@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_medium">
+
+    <TextView
+        android:id="@+id/text_repos_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="reposname"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <RelativeLayout
+        android:layout_below="@id/text_repos_name"
+        android:paddingLeft="@dimen/margin_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/image_avatar"
+            android:layout_width="@dimen/reposlist_icon_size"
+            android:layout_height="@dimen/reposlist_icon_size"
+            android:layout_marginRight="@dimen/margin_small"
+            android:src="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/text_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/image_avatar"
+            android:layout_centerVertical="true"
+            android:text="username"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
+
+</RelativeLayout>
