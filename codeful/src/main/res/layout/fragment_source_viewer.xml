@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context=".sourceViewer.SourceViewerFragment">
 
-    <jp.curigeo.codeful.sourceViewer.SourceCodeView
+    <com.n1sh6r.codeful.sourceViewer.SourceCodeView
         android:id="@+id/sourceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

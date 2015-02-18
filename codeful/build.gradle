@@ -1,26 +1,31 @@
+
+def PACKAGE_NAME = "com.n1sh6r.codeful"
+
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
 }
 
 android {
-    compileSdkVersion 14
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 19
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+
+        applicationId PACKAGE_NAME
     }
     buildTypes {
         release {
@@ -34,9 +39,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile fileTree(dir: '../JavaPrettify', include: ['*.jar'])
-    compile 'com.android.support:support-v4:20.+'
-    compile 'com.android.support:support-annotations:20.+'
+    compile project(':many')
+    compile "com.android.support:appcompat-v7:21.0.3"
+    compile 'com.android.support:support-annotations:20.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.mcxiaoke.volley:library:1.0.6'
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.google.code.gson:gson:2.3'
 }

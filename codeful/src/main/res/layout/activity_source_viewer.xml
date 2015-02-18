@@ -3,5 +3,5 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jp.curigeo.codeful.SourceViewerActivity"
+    tools:context="com.n1sh6r.codeful.SourceViewerActivity"
     tools:ignore="MergeRootFrame" />

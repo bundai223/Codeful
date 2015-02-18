@@ -1,1 +1,1 @@
-include ':codeful'
+include ':codeful', ':toolbar', ':many'
