@@ -44,8 +44,8 @@ public abstract class AutoHideActionBarActivity extends ActionBarActivityBase {
     /**
      * ActionBarが自動非表示をできる状態に初期化する関数
      */
-    protected void enableActionBarAutoHide(final ListView listView) {
-        initActionBarAutoHide();
+    protected void enableActionBarAutoHide(final ListView listView, int autoHideY, int autoHideSensivity) {
+        initActionBarAutoHide(autoHideY, autoHideSensivity);
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             final static int ITEMS_THRESHOLD = 3;
             int lastFvi = 0;
